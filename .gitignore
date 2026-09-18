@@ -1,0 +1,8 @@
+# .NET build outputs
+**/bin/
+**/obj/
+
+# Node / Frontend
+**/node_modules/
+**/dist/
+*.log
