@@ -1,30 +1,30 @@
 {
   "format": 1,
   "restore": {
-    "/home/brisa/studies/moira/backend/backend.csproj": {}
+    "C:\\Users\\jv806\\OneDrive\\Área de Trabalho\\Moira\\moira\\backend\\backend.csproj": {}
   },
   "projects": {
-    "/home/brisa/studies/moira/backend/backend.csproj": {
+    "C:\\Users\\jv806\\OneDrive\\Área de Trabalho\\Moira\\moira\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/brisa/studies/moira/backend/backend.csproj",
+        "projectUniqueName": "C:\\Users\\jv806\\OneDrive\\Área de Trabalho\\Moira\\moira\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "/home/brisa/studies/moira/backend/backend.csproj",
-        "packagesPath": "/home/brisa/.nuget/packages/",
-        "outputPath": "/home/brisa/studies/moira/backend/obj/",
+        "projectPath": "C:\\Users\\jv806\\OneDrive\\Área de Trabalho\\Moira\\moira\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\jv806\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\jv806\\OneDrive\\Área de Trabalho\\Moira\\moira\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/brisa/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\jv806\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "/usr/lib/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
+            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -39,10 +39,11 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.100"
+        "SdkAnalysisLevel": "10.0.400"
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
@@ -69,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.111/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.401/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

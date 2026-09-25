@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "RVaYvtIz8hc=",
+  "dgSpecHash": "9fMjQu3gxhY=",
   "success": true,
-  "projectFilePath": "/home/brisa/studies/moira/backend/backend.csproj",
+  "projectFilePath": "C:\\Users\\jv806\\OneDrive\\Área de Trabalho\\Moira\\moira\\backend\\backend.csproj",
   "expectedPackageFiles": [
-    "/home/brisa/.nuget/packages/microsoft.aspnetcore.openapi/10.0.11/microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
-    "/home/brisa/.nuget/packages/microsoft.openapi/2.7.5/microsoft.openapi.2.7.5.nupkg.sha512"
+    "C:\\Users\\jv806\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.11\\microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
+    "C:\\Users\\jv806\\.nuget\\packages\\microsoft.openapi\\2.7.5\\microsoft.openapi.2.7.5.nupkg.sha512"
   ],
   "logs": []
 }
