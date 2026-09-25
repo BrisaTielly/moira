@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { HeroSection } from './components/landing/HeroSection';
-import { InteractiveReadingSection } from './components/landing/InteractiveReadingSection';
 import { ThemesMarquee } from './components/landing/ThemesMarquee';
 import { BeforeAfterSection } from './components/landing/BeforeAfterSection';
 import { FinalCtaSection } from './components/landing/FinalCtaSection';
@@ -10,19 +9,36 @@ import { HowItWorksSection } from './components/landing/HowItWorksSection';
 import { FeatureCardsSection } from './components/landing/FeatureCardsSection';
 import { FaqSection } from './components/landing/FaqSection';
 import { Footer } from './components/layout/Footer';
+import { ReadingPage } from './components/reading/ReadingPage';
 import { storageService } from './services/storageService';
 import type { SessionData, StartReadingResponse } from './types/session';
 
 export function App() {
   const [session, setSession] = useState<SessionData | null>(() => storageService.getSession());
   const [editingName, setEditingName] = useState(false);
+  const [route, setRoute] = useState(() => window.location.pathname === '/leitura' ? 'reading' : 'home');
   usePageScrollVars();
 
-  const scrollToReading = () => {
-    const el = document.getElementById('leitura');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+  useEffect(() => {
+    const handlePopState = () => {
+      setRoute(window.location.pathname === '/leitura' ? 'reading' : 'home');
+      window.scrollTo({ top: 0 });
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigate = (path: '/' | '/leitura') => {
+    window.history.pushState({}, '', path);
+    setRoute(path === '/leitura' ? 'reading' : 'home');
+    window.scrollTo({ top: 0 });
+  };
+
+  const startReading = () => navigate('/leitura');
+  const returnHome = () => {
+    setEditingName(false);
+    navigate('/');
   };
 
   const handleSaveName = (name: string) => {
@@ -33,7 +49,9 @@ export function App() {
 
   const handleEditName = () => {
     setEditingName(true);
-    scrollToReading();
+    if (route !== 'reading') {
+      startReading();
+    }
   };
 
   const handleQuestionSubmitted = (response: StartReadingResponse) => {
@@ -48,6 +66,20 @@ export function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  if (route === 'reading') {
+    return (
+      <ReadingPage
+        userName={editingName ? undefined : session?.userName}
+        sessionId={session?.sessionId || 'sess_temp'}
+        initialQuestion={session?.question || ''}
+        onBack={returnHome}
+        onSaveName={handleSaveName}
+        onEditName={handleEditName}
+        onQuestionSubmitted={handleQuestionSubmitted}
+      />
+    );
+  }
+
   return (
     <div
       style={{
@@ -60,11 +92,11 @@ export function App() {
       <Navbar
         userName={session?.userName}
         onEditName={handleEditName}
-        onStartReading={scrollToReading}
+        onStartReading={startReading}
       />
 
       <main style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-        <HeroSection onStartReading={scrollToReading} />
+        <HeroSection onStartReading={startReading} />
 
         <ThemesMarquee />
 
@@ -72,21 +104,12 @@ export function App() {
 
         <HowItWorksSection />
 
-        <InteractiveReadingSection
-          userName={editingName ? undefined : session?.userName}
-          sessionId={session?.sessionId || 'sess_temp'}
-          initialQuestion={session?.question || ''}
-          onSaveName={handleSaveName}
-          onEditName={handleEditName}
-          onQuestionSubmitted={handleQuestionSubmitted}
-        />
-
         <FeatureCardsSection />
 
         <FaqSection />
 
         <FinalCtaSection
-          onStartReading={scrollToReading}
+          onStartReading={startReading}
           userName={editingName ? undefined : session?.userName}
         />
       </main>
