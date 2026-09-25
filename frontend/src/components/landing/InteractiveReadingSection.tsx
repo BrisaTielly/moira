@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Compass, Heart, Sparkles, ArrowRight, RotateCcw, AlertTriangle, CheckCircle2, User } from 'lucide-react';
+import { Reveal } from '../motion/Reveal';
 import { readingService } from '../../services/readingService';
 import type { StartReadingResponse } from '../../types/session';
 
@@ -125,6 +126,7 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
         {/* Caso 1: Usuário ainda não informou o nome */}
         {!userName ? (
           <>
+            <Reveal variant="left">
             <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <span
                 style={{
@@ -135,7 +137,7 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
                   color: 'var(--brand-plum)',
                 }}
               >
-                Primeiro Acesso · Onboarding
+                ✦ Sua leitura começa aqui
               </span>
 
               <h2
@@ -170,7 +172,10 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
               </div>
             </div>
 
+            </Reveal>
+
             {/* Card para digitar o nome */}
+            <Reveal variant="scale" delay={120}>
             <div
               style={{
                 backgroundColor: 'var(--bg-page)',
@@ -241,11 +246,13 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
                 </p>
               </form>
             </div>
+            </Reveal>
           </>
         ) : (
           /* Caso 2: Nome já cadastrado/lembrado -> Tela de Pergunta (V2 Seção 02) */
           <>
             {/* Lado Esquerdo: Headline & 3 Pilares (V2) */}
+            <Reveal variant="left">
             <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '28px' }}>
               <div>
                 <span
@@ -257,7 +264,7 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
                     color: 'var(--brand-plum)',
                   }}
                 >
-                  Sua Pergunta · Passo 01
+                  Sua pergunta · Passo 1 de 3
                 </span>
 
                 <h2
@@ -365,7 +372,10 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
               </div>
             </div>
 
+            </Reveal>
+
             {/* Lado Direito: Card com a Textarea da Pergunta */}
+            <Reveal variant="scale" delay={120}>
             <div
               style={{
                 backgroundColor: 'var(--bg-page)',
@@ -554,7 +564,8 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
                   <ArrowRight size={18} />
                 </button>
 
-                {/* Switch de teste de erro para validação da task M1 */}
+                {/* Switch de teste de erro para validação da task M1 (somente em desenvolvimento) */}
+                {import.meta.env.DEV && (
                 <div
                   style={{
                     display: 'flex',
@@ -577,8 +588,10 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
                     Simular erro de rede
                   </label>
                 </div>
+                )}
               </form>
             </div>
+            </Reveal>
           </>
         )}
       </div>

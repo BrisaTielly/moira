@@ -1,146 +1,161 @@
 import React from 'react';
-import { Share2, BookmarkCheck, Sparkles } from 'lucide-react';
+import { Check, Plus, Sparkles } from 'lucide-react';
+import { Reveal } from '../motion/Reveal';
+import { TarotCard } from '../tarot/TarotCard';
+import { SAMPLE_SPREAD, type ArcanaFace } from '../../lib/arcana';
 
-export const FeatureCardsSection: React.FC = () => {
-  return (
-    <section
-      id="cards-memoria"
-      style={{
-        width: '100%',
-        padding: '80px 24px',
-        backgroundColor: '#FFFFFF',
-        borderTop: '1px solid var(--border-subtle)',
-        borderBottom: '1px solid var(--border-subtle)',
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '48px',
-          alignItems: 'center',
-        }}
-      >
-        {/* Card 1: Cards Compartilháveis para Stories */}
-        <div
-          style={{
-            backgroundColor: 'var(--bg-page)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: '24px',
-            padding: '36px',
-            textAlign: 'left',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
-          <div
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--brand-plum-light)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--brand-plum)',
-            }}
-          >
-            <Share2 size={20} />
-          </div>
+/** Entradas ilustrativas do Grimório (placeholder de conteúdo). */
+const ENTRIES: { date: string; face: ArcanaFace; text: string }[] = [
+  { date: 'Lua nova · 1ª leitura', face: SAMPLE_SPREAD[0], text: 'Um recomeço pede esperança antes de certeza.' },
+  { date: 'Quarto crescente', face: SAMPLE_SPREAD[1], text: 'Coragem gentil diante da mudança de trabalho.' },
+  { date: 'Lua cheia', face: SAMPLE_SPREAD[2], text: 'Um ciclo se fecha, e você percebe o quanto cresceu.' },
+];
 
-          <h3 style={{ fontSize: '24px', color: 'var(--text-main)' }}>
-            Cards de Tiragem Compartilháveis
-          </h3>
-
-          <p style={{ fontSize: '15px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
-            Transforme o resultado da sua tiragem em um card estético para compartilhar no Instagram Stories, TikTok ou guardar na sua galeria como lembrete do seu ciclo.
-          </p>
-
-          {/* Mini Mockup do Card de Compartilhamento */}
-          <div
-            style={{
-              marginTop: '12px',
-              backgroundColor: '#FAF5EE',
-              border: '1px solid #D6C8A8',
-              borderRadius: '16px',
-              padding: '20px',
-              textAlign: 'center',
-              boxShadow: 'var(--shadow-sm)',
-            }}
-          >
-            <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.14em', color: '#8A7753', fontWeight: 700 }}>
-              Moira · Síntese do Dia
-            </span>
-            <p style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', fontStyle: 'italic', margin: '10px 0', color: '#3A3224' }}>
-              “O caminho se abre quando você olha além do medo.”
-            </p>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', fontSize: '12px', color: '#7E6D4E' }}>
-              <span>A Estrela</span> • <span>A Força</span> • <span>O Mundo</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: Continuidade & Memória Segura */}
-        <div
-          style={{
-            backgroundColor: 'var(--bg-page)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: '24px',
-            padding: '36px',
-            textAlign: 'left',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
-          <div
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--brand-plum-light)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--brand-plum)',
-            }}
-          >
-            <BookmarkCheck size={20} />
-          </div>
-
-          <h3 style={{ fontSize: '24px', color: 'var(--text-main)' }}>
-            Memória e Retorno Contínuo
-          </h3>
-
-          <p style={{ fontSize: '15px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
-            A Moira lembra das suas conversas e decisões anteriores somente se você autorizar. Reencontre temas passados e acompanhe o desenrolar das suas escolhas ao longo do tempo.
-          </p>
-
-          {/* Mini Mockup de Memória Autorizada (V2 Prancha 03) */}
-          <div
-            style={{
-              marginTop: '12px',
-              backgroundColor: '#FFFFFF',
-              border: '1px solid var(--border-subtle)',
-              borderRadius: '16px',
-              padding: '18px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              boxShadow: 'var(--shadow-sm)',
-            }}
-          >
-            <Sparkles size={20} color="var(--brand-plum)" />
-            <div style={{ fontSize: '13px', color: 'var(--text-main)', lineHeight: '1.4' }}>
-              <span style={{ fontWeight: 600, display: 'block' }}>Memória autorizada:</span>
-              <span style={{ color: 'var(--text-muted)' }}>“Você está considerando mudar de carreira e valoriza estabilidade.”</span>
-            </div>
-          </div>
+const GrimoireViz: React.FC = () => (
+  <div className="book">
+    <div className="book__head">
+      <span className="book__title">Grimório de Ana</span>
+      <span className="book__meta">3 leituras · 1 ciclo</span>
+    </div>
+    {ENTRIES.map((entry, i) => (
+      <div key={entry.date} className="entry" style={{ ['--i' as string]: i }}>
+        <TarotCard face={entry.face} flipped className="entry__mini" />
+        <div>
+          <div className="entry__date">{entry.date}</div>
+          <div className="entry__text">{entry.text}</div>
         </div>
       </div>
-    </section>
-  );
-};
+    ))}
+    <div className="entry entry--next" style={{ ['--i' as string]: ENTRIES.length }}>
+      <span className="entry__slot">
+        <Plus size={16} />
+      </span>
+      <div className="entry__text">Sua próxima página começa com uma nova pergunta</div>
+    </div>
+  </div>
+);
+
+const StoryViz: React.FC = () => (
+  <div className="story-stage">
+    <div className="story" aria-label="Exemplo de card para Stories">
+      <span className="story__brand">moira ✦</span>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'center' }}>
+        <span className="story__label">Minha carta guia</span>
+        <p className="story__quote">“Eu escolho a coragem gentil.”</p>
+      </div>
+      <div className="story__cards">
+        {SAMPLE_SPREAD.map((face) => (
+          <TarotCard key={face.name} face={face} flipped />
+        ))}
+      </div>
+      <span className="story__who">A Estrela · A Força · O Mundo</span>
+    </div>
+  </div>
+);
+
+const MemoryViz: React.FC = () => (
+  <div className="memory">
+    <span className="memory__q">Ao final da leitura, você decide:</span>
+    <div className="switch-row">
+      <span>Lembrar desta conversa na próxima vez</span>
+      <span className="switch" role="presentation" />
+    </div>
+    <div className="memory__saved">
+      <Sparkles size={18} />
+      <div>
+        <strong style={{ display: 'block' }}>Memória autorizada</strong>
+        <span style={{ color: 'var(--text-muted)' }}>
+          “Você está considerando mudar de carreira e valoriza estabilidade.”
+        </span>
+      </div>
+    </div>
+  </div>
+);
+
+interface Feature {
+  num: string;
+  eyebrow: string;
+  title: React.ReactNode;
+  text: string;
+  checks: string[];
+  viz: React.ReactNode;
+}
+
+const FEATURES: Feature[] = [
+  {
+    num: '01',
+    eyebrow: 'Grimório Pessoal',
+    title: (
+      <>
+        Cada leitura vira uma página <span className="grad-text">da sua história.</span>
+      </>
+    ),
+    text: 'Suas tiragens não somem num histórico. Elas se reúnem num Grimório que é só seu, com as cartas, as reflexões e os ciclos que você atravessou.',
+    checks: ['Releia leituras antigas e perceba padrões', 'Acompanhe como suas escolhas se desenrolaram', 'Quanto mais você volta, mais a Moira te conhece'],
+    viz: <GrimoireViz />,
+  },
+  {
+    num: '02',
+    eyebrow: 'Card para Stories',
+    title: (
+      <>
+        Leve a sua carta guia <span className="grad-text">para onde você for.</span>
+      </>
+    ),
+    text: 'Transforme a síntese da leitura num card bonito, pronto para os Stories ou para a galeria. Uma afirmação sua, não uma propaganda.',
+    checks: ['Formato vertical para Instagram e TikTok', 'Sua frase-guia em destaque', 'Um lembrete visual do seu ciclo'],
+    viz: <StoryViz />,
+  },
+  {
+    num: '03',
+    eyebrow: 'Memória com consentimento',
+    title: (
+      <>
+        Ela lembra de você <span className="grad-text">só se você quiser.</span>
+      </>
+    ),
+    text: 'A Moira pode retomar temas das conversas anteriores, mas só guarda o que você autorizar. Você decide o que fica.',
+    checks: ['Nada é salvo sem a sua permissão', 'Suas perguntas não são públicas', 'Você pode apagar quando quiser'],
+    viz: <MemoryViz />,
+  },
+];
+
+export const FeatureCardsSection: React.FC = () => (
+  <section id="grimorio" className="grim">
+    <div className="container">
+      <Reveal className="grim__intro">
+        <span className="eyebrow">Depois da leitura</span>
+        <h2 className="section-title">
+          A resposta é só o começo. <span className="grad-text">A jornada fica com você.</span>
+        </h2>
+      </Reveal>
+
+      {FEATURES.map((f, i) => {
+        const flip = i % 2 === 1;
+        return (
+          <div key={f.num} className={`feat${flip ? ' feat--flip' : ''}`}>
+            <Reveal className="feat__text" variant={flip ? 'right' : 'left'}>
+              <span className="eyebrow eyebrow--bare">
+                <span className="eyebrow__num">{f.num}</span>
+                {f.eyebrow}
+              </span>
+              <h3>{f.title}</h3>
+              <p>{f.text}</p>
+              <ul className="checks">
+                {f.checks.map((c) => (
+                  <li key={c}>
+                    <Check size={16} strokeWidth={2.5} />
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
+            <Reveal variant="scale" delay={150}>
+              {f.viz}
+            </Reveal>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+);

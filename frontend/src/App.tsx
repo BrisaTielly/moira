@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { HeroSection } from './components/landing/HeroSection';
 import { InteractiveReadingSection } from './components/landing/InteractiveReadingSection';
+import { ThemesMarquee } from './components/landing/ThemesMarquee';
+import { BeforeAfterSection } from './components/landing/BeforeAfterSection';
+import { FinalCtaSection } from './components/landing/FinalCtaSection';
+import { usePageScrollVars } from './hooks/useScrollVars';
 import { HowItWorksSection } from './components/landing/HowItWorksSection';
 import { FeatureCardsSection } from './components/landing/FeatureCardsSection';
 import { FaqSection } from './components/landing/FaqSection';
@@ -12,6 +16,7 @@ import type { SessionData, StartReadingResponse } from './types/session';
 export function App() {
   const [session, setSession] = useState<SessionData | null>(() => storageService.getSession());
   const [editingName, setEditingName] = useState(false);
+  usePageScrollVars();
 
   const scrollToReading = () => {
     const el = document.getElementById('leitura');
@@ -61,6 +66,12 @@ export function App() {
       <main style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
         <HeroSection onStartReading={scrollToReading} />
 
+        <ThemesMarquee />
+
+        <BeforeAfterSection />
+
+        <HowItWorksSection />
+
         <InteractiveReadingSection
           userName={editingName ? undefined : session?.userName}
           sessionId={session?.sessionId || 'sess_temp'}
@@ -70,11 +81,14 @@ export function App() {
           onQuestionSubmitted={handleQuestionSubmitted}
         />
 
-        <HowItWorksSection />
-
         <FeatureCardsSection />
 
         <FaqSection />
+
+        <FinalCtaSection
+          onStartReading={scrollToReading}
+          userName={editingName ? undefined : session?.userName}
+        />
       </main>
 
       <Footer

@@ -1,130 +1,81 @@
 import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { Plus } from 'lucide-react';
+import { Reveal } from '../motion/Reveal';
 
 interface FaqItem {
   question: string;
   answer: string;
 }
 
+const FAQS: FaqItem[] = [
+  {
+    question: 'Preciso criar uma conta para fazer a primeira leitura?',
+    answer:
+      'Não. Você começa informando apenas o nome pelo qual prefere ser chamada. A primeira tiragem completa é liberada sem cadastro, e sua sessão fica guardada neste navegador.',
+  },
+  {
+    question: 'Qual a diferença entre a Moira e um chatbot comum de IA?',
+    answer:
+      'A Moira não é uma caixa de texto genérica. A tiragem acontece num painel próprio, com cartas que você embaralha, corta e revela, e a interpretação vira uma conversa sobre o seu contexto, com perguntas que ajudam você a encontrar a sua própria resposta.',
+  },
+  {
+    question: 'A Moira prevê o futuro?',
+    answer:
+      'Não, e ela não vai fingir que prevê. Aqui o Tarot é uma linguagem simbólica para refletir sobre o seu momento. A Moira oferece perspectivas e perguntas que trazem clareza, nunca sentenças, ameaças ou promessas de destino.',
+  },
+  {
+    question: 'Minhas perguntas e reflexões são confidenciais?',
+    answer:
+      'Sim. Suas consultas não são públicas, e as memórias só são guardadas se você autorizar expressamente ao final da experiência.',
+  },
+  {
+    question: 'Posso consultar qualquer tema da minha vida?',
+    answer:
+      'Pode. Trabalho, relacionamentos, transições difíceis ou autoconhecimento: a Moira acolhe a sua questão com neutralidade e sem julgamentos.',
+  },
+  {
+    question: 'O que acontece depois da primeira leitura?',
+    answer:
+      'Você recebe a leitura completa, sem travas. Ao final, a Moira deixa uma reflexão para os próximos dias e você pode guardar tudo no seu Grimório Pessoal para voltar quando quiser.',
+  },
+];
+
 export const FaqSection: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
-  const faqs: FaqItem[] = [
-    {
-      question: 'Preciso criar uma conta para fazer a primeira leitura?',
-      answer:
-        'Não. Na Moira, você começa apenas informando o nome pelo qual prefere ser chamada. A primeira tiragem completa é liberada sem exigir cadastro, e sua sessão fica guardada temporariamente neste navegador.',
-    },
-    {
-      question: 'Qual a diferença entre a Moira e um chatbot comum de IA?',
-      answer:
-        'A Moira não responde de forma robótica ou simplista. Ela possui um painel de tiragem interativo com presença visual forte das cartas, respeita o tempo do ritual místico e constrói uma conversa empática com perguntas para que você encontre sua própria resposta.',
-    },
-    {
-      question: 'Minhas perguntas e reflexões são confidenciais?',
-      answer:
-        'Sim, total privacidade. Suas consultas não são compartilhadas publicamente e suas memórias só são armazenadas se você expressamente consentir ao final da experiência.',
-    },
-    {
-      question: 'Posso consultar qualquer tema da minha vida?',
-      answer:
-        'Com certeza. Seja trabalho, relacionamentos, transições difíceis ou buscas de autoconhecimento, a Moira acolhe sua questão de forma neutra e sem pré-julgamentos.',
-    },
-  ];
-
   return (
-    <section
-      id="faq"
-      style={{
-        width: '100%',
-        padding: '90px 24px',
-        maxWidth: '860px',
-        margin: '0 auto',
-        textAlign: 'center',
-      }}
-    >
-      <span
-        style={{
-          fontSize: '12px',
-          fontWeight: 700,
-          textTransform: 'uppercase',
-          letterSpacing: '0.16em',
-          color: 'var(--brand-plum)',
-        }}
-      >
-        Tire suas dúvidas
-      </span>
+    <section id="faq" style={{ width: '100%', padding: '110px 24px', maxWidth: '860px', margin: '0 auto' }}>
+      <Reveal style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14, marginBottom: 44 }}>
+        <span className="eyebrow">Tire suas dúvidas</span>
+        <h2 className="section-title">Perguntas frequentes</h2>
+      </Reveal>
 
-      <h2
-        style={{
-          fontSize: 'clamp(30px, 4vw, 40px)',
-          color: 'var(--text-main)',
-          marginTop: '10px',
-          marginBottom: '40px',
-        }}
-      >
-        Perguntas Frequentes
-      </h2>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', textAlign: 'left' }}>
-        {faqs.map((faq, index) => {
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        {FAQS.map((faq, index) => {
           const isOpen = openIndex === index;
+          const panelId = `faq-panel-${index}`;
           return (
-            <div
-              key={faq.question}
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                transition: 'border-color 0.2s ease',
-              }}
-            >
-              <button
-                type="button"
-                onClick={() => setOpenIndex(isOpen ? null : index)}
-                aria-expanded={isOpen}
-                style={{
-                  width: '100%',
-                  padding: '20px 24px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  fontSize: '17px',
-                  fontWeight: 600,
-                  color: 'var(--text-main)',
-                  fontFamily: 'var(--font-sans)',
-                }}
-              >
-                <span>{faq.question}</span>
-                <ChevronDown
-                  size={20}
-                  color="var(--text-muted)"
-                  style={{
-                    transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform 0.2s ease',
-                    flexShrink: 0,
-                  }}
-                />
-              </button>
-
-              {isOpen && (
-                <div
-                  style={{
-                    padding: '0 24px 20px',
-                    fontSize: '15px',
-                    color: 'var(--text-muted)',
-                    lineHeight: '1.6',
-                  }}
+            <Reveal key={faq.question} delay={index * 60}>
+              <div className={`faq__item${isOpen ? ' is-open' : ''}`}>
+                <button
+                  type="button"
+                  className="faq__btn"
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
                 >
-                  {faq.answer}
+                  <span>{faq.question}</span>
+                  <span className="faq__icon" aria-hidden="true">
+                    <Plus size={16} />
+                  </span>
+                </button>
+                <div className="faq__panel" id={panelId} role="region" aria-hidden={!isOpen}>
+                  <div>
+                    <p>{faq.answer}</p>
+                  </div>
                 </div>
-              )}
-            </div>
+              </div>
+            </Reveal>
           );
         })}
       </div>
