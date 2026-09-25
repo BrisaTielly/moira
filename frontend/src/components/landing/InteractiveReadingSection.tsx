@@ -107,10 +107,8 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
       id="leitura"
       style={{
         width: '100%',
-        padding: '80px 24px',
-        backgroundColor: '#FFFFFF',
-        borderTop: '1px solid var(--border-subtle)',
-        borderBottom: '1px solid var(--border-subtle)',
+        padding: '56px 24px 96px',
+        backgroundColor: 'transparent',
       }}
     >
       <div
