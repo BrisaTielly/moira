@@ -6,30 +6,36 @@ namespace Moira.Backend.Tests;
 public class DrawServiceTests
 {
     [Fact]
-    public void Create_MapsTheThreeSelectionsToTheirPositionsInOrder()
+    public void Create_MapsThreeSelectionsFromTheAvailableCardsInOrder()
     {
         var service = new DrawService();
-        var selectedCards = CreateCards(3);
+        var availableCards = CreateCards(4);
+        var selectedIds = new[]
+        {
+            availableCards[2].Id,
+            availableCards[0].Id,
+            availableCards[3].Id
+        };
 
-        var draw = service.Create(selectedCards);
+        var draw = service.Create(availableCards, selectedIds);
 
         Assert.Collection(
             draw.Cards,
             first =>
             {
-                Assert.Equal(selectedCards[0], first.Card);
+                Assert.Equal(availableCards[2], first.Card);
                 Assert.Equal(1, first.Order);
                 Assert.Equal(DrawPosition.WhatWeighs, first.Position);
             },
             second =>
             {
-                Assert.Equal(selectedCards[1], second.Card);
+                Assert.Equal(availableCards[0], second.Card);
                 Assert.Equal(2, second.Order);
                 Assert.Equal(DrawPosition.WhatIsHidden, second.Position);
             },
             third =>
             {
-                Assert.Equal(selectedCards[2], third.Card);
+                Assert.Equal(availableCards[3], third.Card);
                 Assert.Equal(3, third.Order);
                 Assert.Equal(DrawPosition.NextMove, third.Position);
             });
@@ -42,7 +48,7 @@ public class DrawServiceTests
         var cards = CreateCards(2);
 
         var exception = Assert.Throws<ArgumentException>(() =>
-            service.Create(new[] { cards[0], cards[1], cards[0] }));
+            service.Create(cards, new[] { cards[0].Id, cards[1].Id, cards[0].Id }));
 
         Assert.Equal("Uma carta não pode aparecer mais de uma vez na tiragem.", exception.Message);
     }
@@ -52,9 +58,21 @@ public class DrawServiceTests
     {
         var service = new DrawService();
 
-        var exception = Assert.Throws<ArgumentException>(() => service.Create(CreateCards(2)));
+        var exception = Assert.Throws<ArgumentException>(() =>
+            service.Create(CreateCards(4), new[] { "card-1", "card-2" }));
 
         Assert.Equal("Uma tiragem precisa conter exatamente três cartas.", exception.Message);
+    }
+
+    [Fact]
+    public void Create_RejectsASelectionThatIsNotAvailable()
+    {
+        var service = new DrawService();
+
+        var exception = Assert.Throws<ArgumentException>(() =>
+            service.Create(CreateCards(3), new[] { "card-1", "card-2", "unknown" }));
+
+        Assert.Equal("A carta selecionada 'unknown' não está disponível.", exception.Message);
     }
 
     private static IReadOnlyList<Card> CreateCards(int count) =>

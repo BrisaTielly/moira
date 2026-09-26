@@ -11,14 +11,29 @@ public sealed class DrawService
         DrawPosition.NextMove
     };
 
-    public Draw Create(IEnumerable<Card> selectedCards)
+    public Draw Create(IEnumerable<Card> availableCards, IEnumerable<string> selectedCardIds)
     {
-        var drawnCards = selectedCards
-            .Select((card, index) => new DrawnCard(card, PositionAt(index), index + 1));
+        var selections = selectedCardIds.ToArray();
+
+        if (selections.Length != Positions.Length)
+        {
+            throw new ArgumentException("Uma tiragem precisa conter exatamente três cartas.");
+        }
+
+        var cardsById = availableCards
+            .DistinctBy(card => card.Id)
+            .ToDictionary(card => card.Id);
+
+        var drawnCards = selections.Select((cardId, index) =>
+        {
+            if (!cardsById.TryGetValue(cardId, out var card))
+            {
+                throw new ArgumentException($"A carta selecionada '{cardId}' não está disponível.");
+            }
+
+            return new DrawnCard(card, Positions[index], index + 1);
+        });
 
         return new Draw(drawnCards);
     }
-
-    private static DrawPosition PositionAt(int index) =>
-        index < Positions.Length ? Positions[index] : (DrawPosition)0;
 }
