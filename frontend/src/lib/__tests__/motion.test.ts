@@ -52,3 +52,14 @@ describe('staggerDelay', () => {
     expect(staggerDelay(Number.NaN, 100, 40)).toBe(40);
   });
 });
+
+import { inkSchedule } from '../inkSchedule';
+
+describe('inkSchedule', () => {
+  it('encadeia seções pelo número de palavras', () => {
+    expect(inkSchedule([{ text: 'um dois três' }, { text: 'quatro', gap: 100 }], 0, 10)).toEqual([0, 530, 640]);
+  });
+  it('texto vazio não quebra a sequência', () => {
+    expect(inkSchedule([{ text: '   ' }], 0, 10)).toEqual([0, 500]);
+  });
+});

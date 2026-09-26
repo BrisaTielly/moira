@@ -1,35 +1,22 @@
+import { ApiError, postJson } from './apiClient';
 import type { StartReadingRequest, StartReadingResponse } from '../types/session';
+import type { DrawResponse, InterpretationResponse } from '../types/reading';
 
 export const readingService = {
-  async submitQuestion(
-    request: StartReadingRequest,
-    simulateError: boolean = false
-  ): Promise<StartReadingResponse> {
-    // Simula a latência de processamento ritualístico
-    await new Promise((resolve) => setTimeout(resolve, 750));
-
+  async submitQuestion(request: StartReadingRequest, simulateError = false): Promise<StartReadingResponse> {
     if (simulateError) {
-      throw new Error('Não foi possível conectar ao santuário agora. Verifique sua conexão e tente novamente.');
+      // Chave de teste manual (só aparece em desenvolvimento).
+      throw new ApiError('network', 'Não foi possível conectar ao santuário agora. Verifique sua conexão e tente novamente.', 0, true);
     }
+    return postJson<StartReadingResponse>('/readings/question', request);
+  },
 
-    if (!request.userName || request.userName.trim().length === 0) {
-      throw new Error('O nome é obrigatório para iniciar a leitura.');
-    }
+  /** O servidor sorteia; aqui só enviamos QUAIS posições da mesa foram tocadas. */
+  drawCards(readingId: string, sessionId: string, picks: number[]): Promise<DrawResponse> {
+    return postJson<DrawResponse>(`/readings/${encodeURIComponent(readingId)}/draw`, { sessionId, picks });
+  },
 
-    if (!request.question || request.question.trim().length < 5) {
-      throw new Error('Por favor, formule uma pergunta com ao menos 5 caracteres.');
-    }
-
-    const readingId = `rdg_${Math.random().toString(36).substring(2, 9)}_${Date.now().toString(36)}`;
-
-    return {
-      success: true,
-      readingId,
-      sessionId: request.sessionId,
-      userName: request.userName.trim(),
-      question: request.question.trim(),
-      timestamp: new Date().toISOString(),
-      message: 'Sua pergunta foi acolhida pela Moira. As cartas estão prontas para a tiragem.',
-    };
-  }
+  getInterpretation(readingId: string, sessionId: string): Promise<InterpretationResponse> {
+    return postJson<InterpretationResponse>(`/readings/${encodeURIComponent(readingId)}/interpretation`, { sessionId });
+  },
 };

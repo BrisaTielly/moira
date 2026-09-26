@@ -1,0 +1,77 @@
+### Roteiro manual do M1 (VS Code REST Client / Visual Studio / Rider)
+### 1) `dotnet run --project backend` (perfil http → porta 5152)
+### 2) Execute as requisições em ordem. Copie o readingId/sessionId da resposta 1 para as variáveis abaixo.
+
+@api = http://localhost:5152/api/readings
+@session = sess_roteiro_1
+@reading = COLE_AQUI_O_READING_ID
+
+### 1. Pergunta normal → status "ready", tableSlots 12
+POST {{api}}/question
+Content-Type: application/json
+
+{ "sessionId": "{{session}}", "userName": "Ana", "question": "Estou pensando em mudar de trabalho, mas tenho medo de perder estabilidade." }
+
+### 2. Escolher 3 posições da mesa (0 a 11) → devolve as cartas sorteadas no servidor
+POST {{api}}/{{reading}}/draw
+Content-Type: application/json
+
+{ "sessionId": "{{session}}", "picks": [2, 7, 10] }
+
+### 3. Repetir a escolha com outras posições → as cartas NÃO mudam (idempotente)
+POST {{api}}/{{reading}}/draw
+Content-Type: application/json
+
+{ "sessionId": "{{session}}", "picks": [0, 1, 3] }
+
+### 4. Interpretação → status "ready", source "template" (sem chave) ou "model" (com Groq)
+POST {{api}}/{{reading}}/interpretation
+Content-Type: application/json
+
+{ "sessionId": "{{session}}" }
+
+### 5. Repetir a interpretação → mesmo texto, sem nova chamada ao modelo
+POST {{api}}/{{reading}}/interpretation
+Content-Type: application/json
+
+{ "sessionId": "{{session}}" }
+
+### 6. Nova pergunta na MESMA sessão → 402 free_reading_used
+POST {{api}}/question
+Content-Type: application/json
+
+{ "sessionId": "{{session}}", "userName": "Ana", "question": "E sobre o amor, o que as cartas dizem?" }
+
+### 7. SEGURANÇA · risco de autolesão → status "support", CVV 188, sem mesa
+POST {{api}}/question
+Content-Type: application/json
+
+{ "sessionId": "sess_roteiro_2", "userName": "Bia", "question": "Não aguento mais viver, penso em me matar." }
+
+### 8. SEGURANÇA · violência → status "support" com 190 e 180
+POST {{api}}/question
+Content-Type: application/json
+
+{ "sessionId": "sess_roteiro_3", "userName": "Cris", "question": "Meu namorado disse que vai me matar se eu for embora." }
+
+### 9. SEGURANÇA · tema financeiro → leitura normal + careNote pedindo orientação profissional
+###    (faça a pergunta, depois draw + interpretation com o readingId retornado)
+POST {{api}}/question
+Content-Type: application/json
+
+{ "sessionId": "sess_roteiro_4", "userName": "Duda", "question": "Devo investir minhas economias em cripto agora?" }
+
+### 10. Erros de validação → 400
+POST {{api}}/question
+Content-Type: application/json
+
+{ "sessionId": "sess_roteiro_5", "userName": "Ana", "question": "oi" }
+
+### 11. Sessão diferente tentando ler a leitura de outra pessoa → 404
+POST {{api}}/{{reading}}/interpretation
+Content-Type: application/json
+
+{ "sessionId": "sess_intrusa" }
+
+### 12. Falha do provedor (manual): configure uma ApiKey inválida em user-secrets e rode o passo 4
+###     → 503 interpretation_unavailable, retryable: true. Corrija a chave e repita: funciona sem novo sorteio.

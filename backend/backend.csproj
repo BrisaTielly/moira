@@ -4,10 +4,17 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Habilita `dotnet user-secrets` para guardar a chave do provedor de IA fora do repositório. -->
+    <UserSecretsId>moira-backend-5b1f0c7e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- O prompt vai embutido na DLL: não é servido como arquivo estático nem chega ao frontend. -->
+    <EmbeddedResource Include="Prompts\*.md" LogicalName="Moira.Prompts.%(Filename)%(Extension)" />
   </ItemGroup>
 
 </Project>

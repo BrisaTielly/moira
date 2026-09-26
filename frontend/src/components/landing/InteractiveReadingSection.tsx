@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Compass, Heart, Sparkles, ArrowRight, RotateCcw, AlertTriangle, CheckCircle2, User } from 'lucide-react';
 import { Reveal } from '../motion/Reveal';
 import { readingService } from '../../services/readingService';
+import { ApiError } from '../../services/apiClient';
 import type { StartReadingResponse } from '../../types/session';
 
 interface InteractiveReadingSectionProps {
@@ -11,6 +12,8 @@ interface InteractiveReadingSectionProps {
   onSaveName: (name: string) => void;
   onEditName: () => void;
   onQuestionSubmitted: (response: StartReadingResponse) => void;
+  /** Chamado quando a sessão já usou a leitura gratuita (402). */
+  onFreeReadingUsed?: () => void;
 }
 
 export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps> = ({
@@ -20,6 +23,7 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
   onSaveName,
   onEditName,
   onQuestionSubmitted,
+  onFreeReadingUsed,
 }) => {
   // Estado local para coleta de nome (se ainda não preenchido)
   const [nameInput, setNameInput] = useState(userName || '');
@@ -88,6 +92,10 @@ export const InteractiveReadingSection: React.FC<InteractiveReadingSectionProps>
       setSubmissionResult(response);
       onQuestionSubmitted(response);
     } catch (err: unknown) {
+      if (err instanceof ApiError && err.code === 'free_reading_used' && onFreeReadingUsed) {
+        onFreeReadingUsed();
+        return;
+      }
       const message = err instanceof Error ? err.message : 'Falha ao enviar sua pergunta ao santuário.';
       setApiError(message);
     } finally {

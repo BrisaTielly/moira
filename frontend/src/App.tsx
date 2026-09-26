@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { HeroSection } from './components/landing/HeroSection';
 import { ThemesMarquee } from './components/landing/ThemesMarquee';
@@ -59,6 +59,11 @@ export function App() {
     setSession(updated);
   };
 
+  const handleReadingRevealed = useCallback((readingId: string, sessionId: string) => {
+    const updated = storageService.saveReading(readingId, sessionId);
+    if (updated) setSession(updated);
+  }, []);
+
   const handleResetSession = () => {
     storageService.clearSession();
     setSession(null);
@@ -72,10 +77,12 @@ export function App() {
         userName={editingName ? undefined : session?.userName}
         sessionId={session?.sessionId || 'sess_temp'}
         initialQuestion={session?.question || ''}
+        lastReadingId={session?.lastReadingId}
         onBack={returnHome}
         onSaveName={handleSaveName}
         onEditName={handleEditName}
         onQuestionSubmitted={handleQuestionSubmitted}
+        onReadingRevealed={handleReadingRevealed}
       />
     );
   }

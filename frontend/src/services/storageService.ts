@@ -31,6 +31,7 @@ export const storageService = {
       sessionId: existing?.sessionId || generateSessionId(),
       userName: name.trim(),
       question: existing?.question,
+      lastReadingId: existing?.lastReadingId,
       createdAt: existing?.createdAt || now,
       updatedAt: now,
     };
@@ -45,10 +46,29 @@ export const storageService = {
       sessionId: existing?.sessionId || generateSessionId(),
       userName: existing?.userName || '',
       question: question.trim(),
+      lastReadingId: existing?.lastReadingId,
       createdAt: existing?.createdAt || now,
       updatedAt: now,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    return updated;
+  },
+
+  /** Guarda a leitura revelada e adota o sessionId confirmado pelo servidor. */
+  saveReading(readingId: string, sessionId?: string): SessionData | null {
+    const existing = this.getSession();
+    if (!existing) return null;
+    const updated: SessionData = {
+      ...existing,
+      sessionId: sessionId || existing.sessionId,
+      lastReadingId: readingId,
+      updatedAt: new Date().toISOString(),
+    };
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    } catch {
+      // armazenamento indisponível: a leitura continua na tela
+    }
     return updated;
   },
 

@@ -2,7 +2,7 @@ import React from 'react';
 import type { ArcanaFace, ArcanaGlyph } from '../../lib/arcana';
 
 /** Traços simples de linha (placeholder até as ilustrações finais do baralho). */
-const Glyph: React.FC<{ type: ArcanaGlyph }> = ({ type }) => {
+const Glyph: React.FC<{ type: ArcanaGlyph; numeral?: string }> = ({ type, numeral }) => {
   const common = {
     fill: 'none',
     stroke: 'currentColor',
@@ -47,6 +47,23 @@ const Glyph: React.FC<{ type: ArcanaGlyph }> = ({ type }) => {
           <path {...common} d="M30 10a14 14 0 1 0 0 28a11 11 0 0 1 0-28z" />
         </svg>
       );
+    case 'sigil':
+      return (
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <circle {...common} cx="24" cy="24" r="15" />
+          <circle {...common} cx="24" cy="24" r="18.5" strokeWidth={0.7} strokeDasharray="1.5 2.5" />
+          <text
+            x="24"
+            y="28.5"
+            textAnchor="middle"
+            fontSize={numeral && numeral.length > 3 ? 9 : 12}
+            fontFamily="Fraunces, Georgia, serif"
+            fill="currentColor"
+          >
+            {numeral}
+          </text>
+        </svg>
+      );
     case 'sun':
       return (
         <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -87,7 +104,7 @@ export const CardFace: React.FC<{ face: ArcanaFace }> = ({ face }) => (
   <div className="tc-face">
     <span className="tc-face__numeral">{face.numeral}</span>
     <div className="tc-face__art">
-      <Glyph type={face.glyph} />
+      <Glyph type={face.glyph} numeral={face.numeral} />
     </div>
     <span className="tc-face__name">{face.name}</span>
   </div>
