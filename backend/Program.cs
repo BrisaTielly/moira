@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Moira.Backend.HealthChecks;
 using Moira.Backend.Infrastructure;
+using Moira.Backend.Repositories;
 using Moira.Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddScoped<IReadingService, ReadingService>();
+builder.Services.AddScoped<IReadingRepository, ReadingRepository>();
+builder.Services.AddScoped<DrawService>();
 
 var postgresConnection = builder.Configuration.GetConnectionString("Postgres")
     ?? throw new InvalidOperationException(
