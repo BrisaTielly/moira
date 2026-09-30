@@ -30,4 +30,21 @@ public class ReadingsController : ControllerBase
             return BadRequest(new { error = ex.Message });
         }
     }
+
+    [HttpGet("{readingId}")]
+    [ProducesResponseType(typeof(ReadingResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetReading(string readingId, [FromQuery] string? sessionId)
+    {
+        try
+        {
+            var result = await _readingService.GetReadingAsync(readingId, sessionId);
+            return result is null ? NotFound() : Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
 }
